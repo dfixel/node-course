@@ -7,11 +7,18 @@ const http = require("http"),
 server.on("request", (req, res) => {
   if (req.url === "/compute") {
     console.log("Entró a /compute y forkeo..");
-    // write your code here
+    const pepe = fork("./compute");
+    pepe.send();
+
+    pepe.on("message", (value) => {
+      res.end(`Sum is ${value}`);
+    });
+
   } else {
     console.log("Entró a otro route!");
     res.end(`Run http://${hostname}:${port}/compute`);
   }
+
 });
 
 server.listen(port, hostname, () => {
