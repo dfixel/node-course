@@ -7,10 +7,32 @@ module.exports = (countryInfo) => {
 
   function getByCode(code) {
     // Your promise code here!
+    return new Promise((resolve, reject) => {
+      countryInfo.getCountryInfo(code, (err, data) => {
+        if (err) {
+          reject(err);
+        } else if (data && data.name && data.code) {
+          resolve(data);
+        } else {
+          resolve(null);
+        }
+      });
+    });
   }
 
   function getByName(name) {
     // Your promise code here!
+    return new Promise((resolve, reject) => {
+      countryInfo.getCountryInfoByName(name, (err, data) => {
+        if (err) {
+          reject(err);
+        } else if (data && data.name && data.code) {
+          resolve(data);
+        } else {
+          resolve(null);
+        }
+      });
+    });
   }
   
   return {

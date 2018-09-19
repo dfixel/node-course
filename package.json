@@ -6,7 +6,7 @@
   "scripts": {
     "test-class2": "_mocha -- exercises/country-info/test/*.tests.js",
     "test-class3": "_mocha -- exercises/testing/*.tests.js",
-    "test-class3-coverage": "NODE_ENV=test istanbul cover _mocha -- exercises/testing/*.tests.js"
+    "test-class3-coverage": "istanbul cover _mocha -- exercises/testing/*.tests.js"
   },
   "repository": {
     "type": "git",

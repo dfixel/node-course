@@ -28,15 +28,42 @@ describe("countries tests", () => {
       });
 
       it("getByCode() should return null when countryInfo.getCountryInfo() doesn't return a valid response", () => {
-        
+        const stubGetCountryInfo = sinon.stub(countryInfo, "getCountryInfo").callsFake((code, cb) => {
+          stubGetCountryInfo.restore();
+          expect(code).to.eql(data.code);
+          cb(null, "Cualquier cosa");
+        });
+
+        return countries.getByCode(data.code).then((country) => {
+          expect(stubGetCountryInfo.calledOnce).to.eql(true);
+          expect(country).to.eql(null);
+        });
       });
 
       it("getByName() should call countryInfo.getCountryInfoByName() with given country name and return data", () => {
-        
+        const stubGetCountryInfo = sinon.stub(countryInfo, "getCountryInfoByName").callsFake((name, cb) => {
+          stubGetCountryInfo.restore();
+          expect(name).to.eql(data.name);
+          cb(null, data);
+        });
+
+        return countries.getByName(data.name).then((country) => {
+          expect(stubGetCountryInfo.calledOnce).to.eql(true);
+          expect(country).to.eql(data);
+        });
       });
 
       it("getByName() should return null when countryInfo.getCountryInfoByName() doesn't return a valid response", () => {
-        
+        const stubGetCountryInfo = sinon.stub(countryInfo, "getCountryInfoByName").callsFake((name, cb) => {
+          stubGetCountryInfo.restore();
+          expect(name).to.eql(data.name);
+          cb(null, "Cualquier cosa");
+        });
+
+        return countries.getByName(data.name).then((country) => {
+          expect(stubGetCountryInfo.calledOnce).to.eql(true);
+          expect(country).to.eql(null);
+        });
       });
 
     });
@@ -62,6 +89,19 @@ describe("countries tests", () => {
       });
 
       it("getByName() should reject with the error given by countryInfo.getCountryInfoByName()", () => {
+        const stubGetCountryInfo = sinon.stub(countryInfo, "getCountryInfoByName").callsFake((_, cb) => {
+          stubGetCountryInfo.restore();
+          cb(error);
+        });
+
+        return countries.getByName(data.name)
+          .then(() => {
+            throw new Error("This promise should be rejected!");
+          })
+          .catch((err) => {
+            expect(stubGetCountryInfo.calledOnce).to.eql(true);
+            expect(err).to.eql(error);
+          });
         
       });
 
@@ -78,15 +118,22 @@ describe("countries tests", () => {
     });
 
     it("getByCode() should return null when a country is not found", () => {
+      return countries.getByCode("2").then((country) => {
+        expect(country).to.eql(null);
+      });
       
     });
 
     it("getByName() should get the code of the country 'Argentina'", () => {
-      
+      return countries.getByName("Argentina").then((country) => {
+        expect(country.code).to.eql("AR");
+      });
     });
 
     it("getByName() should return null when a country is not found", () => {
-      
+      return countries.getByName("2").then((country) => {
+        expect(country).to.eql(null);
+      });
     });
 
   });
