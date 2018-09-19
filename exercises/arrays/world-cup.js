@@ -201,33 +201,24 @@ function simulate() {
     // completar
     const teamInBox = getTeamsForBox(box);
     const alredyShuffled = shuffle(teamInBox);
-    alredyShuffled.forEach((n) =>
-    {n.group} = {})
-
-    alredyShuffled.forEach((n) => {}
-    let teamInTeams = teams.find(n);
-    teamInTeams.group = n.group;
-    return teamInTeams;
-    }
-    
+    alredyShuffled.forEach((team, index) => {
+      team.group = groups[index]; 
+    });
     
 
     if (box === 1) {
-      const wrongTeam = teamInBox.find((n) => n.group === "A");
+      const wrongTeam = teamInBox.find((n) => n.group === "A" && n.name !== "Rusia");
       wrongTeam.group = "H";
-      const motherRussia = teamInBox.find((n) => n.name === "Rusia");
-      motherRussia.group = "A";
     }
 
 
+    console.log("Resultados del sorteo:");
+    groups.forEach((g) => {
+      console.log(`Grupo ${g}:`);
+      const teamNames = getTeamsForGroup(g).map(t => t.name);
+      console.log(teamNames.join(", "));
+    });
   }
-
-  console.log("Resultados del sorteo:");
-  groups.forEach((g) => {
-    console.log(`Grupo ${g}:`);
-    const teamNames = getTeamsForGroup(g).map(t => t.name);
-    console.log(teamNames.join(", "));
-  });
 }
 
 simulate();
